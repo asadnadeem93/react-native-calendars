@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import styleConstructor from './style';
 import {weekDayNames} from '../../dateutils';
 import {CHANGE_MONTH_LEFT_ARROW, CHANGE_MONTH_RIGHT_ARROW} from '../../testIDs';
+const { numberToArabic } = require("number-to-arabic");
+
 
 
 class CalendarHeader extends Component {
@@ -128,13 +130,22 @@ class CalendarHeader extends Component {
       indicator = <ActivityIndicator color={this.props.theme && this.props.theme.indicatorColor}/>;
     }
 
+    let month;
+    if(this.props.arabic){
+      let temp = this.props.month.toString(this.props.monthFormat)
+      month = temp.split(' ')[0] + " " + numberToArabic(temp.split(' ')[1])
+    }else{
+      month = this.props.month.toString(this.props.monthFormat)
+    }
+
+
     return (
       <View style={this.props.style}>
         <View style={this.style.header}>
           {leftArrow}
           <View style={{ flexDirection: 'row' }}>
             <Text allowFontScaling={false} style={this.style.monthText} accessibilityTraits='header'>
-              {this.props.month.toString(this.props.monthFormat)}
+              {month}
             </Text>
             {indicator}
           </View>
@@ -164,3 +175,4 @@ class CalendarHeader extends Component {
 }
 
 export default CalendarHeader;
+
